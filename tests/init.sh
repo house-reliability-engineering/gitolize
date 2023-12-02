@@ -15,6 +15,18 @@ want_command_output() {
    
 }
 
+want_command_output_grep() {
+  local WANT="$1"
+  shift
+  local GOT="$("$@")"
+  grep -q "$WANT" <<< "$GOT" || {
+    echo "output of: $*
+  want: $WANT
+  got: $GOT" 1>&2
+    return 1
+  }
+}
+
 want_file_contents() {
   diff \
     -u \

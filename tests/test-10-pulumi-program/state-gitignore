@@ -1,0 +1,6 @@
+*.attrs
+*.bak
+.pulumi/backups
+.pulumi/history
+.pulumi/locks
+.pulumi/meta.yaml.attrs

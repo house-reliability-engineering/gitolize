@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "test-10-pulumi-program"
+description = "Pulumi program for testing gitolize"
+authors = ["Filip Zyzniewski <filip.zyzniewski@gmail.com>"]
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+protobuf = "^3"  # https://github.com/pulumi/pulumi/issues/9694
+pulumi = "^3"
+pulumi-command = "^0"
+python = "^3.11"
+pyyaml = "^6"  # https://github.com/yaml/pyyaml/issues/724
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
