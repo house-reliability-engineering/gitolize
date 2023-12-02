@@ -27,9 +27,9 @@ git() {
   esac
   if [[ "$VERBOSE" ]]
   then
-    echo "running $GIT $COMMAND $EXTRA_FLAGS $@" 1>&2
+    echo "running $GIT -C "$LOCAL_DIRECTORY" $COMMAND $EXTRA_FLAGS $@" 1>&2
   fi
-  $GIT $COMMAND $EXTRA_FLAGS "$@"
+  $GIT -C "$LOCAL_DIRECTORY" $COMMAND $EXTRA_FLAGS "$@"
 }
 
 LOCK_FILE=gitolize.lock
@@ -112,9 +112,7 @@ then
   COMMIT_MESSAGE="$*"
 fi
 
-cd "$LOCAL_DIRECTORY"
-
-if [[ -d .git ]]
+if [[ -d "$LOCAL_DIRECTORY/.git" ]]
 then
   git checkout "$BRANCH"
   git pull
@@ -123,14 +121,14 @@ else
     --branch "$BRANCH" \
     --depth 1 \
     "$GIT_REPOSITORY" \
-    .
+    "$LOCAL_DIRECTORY"
 fi
 
 if [[ "$WRITE" ]]
 then
   git checkout -b "$LOCK_BRANCH"
   LOCK_MESSAGE="Locking for $COMMIT_MESSAGE"
-  echo "$LOCK_MESSAGE" >> "$LOCK_FILE"
+  echo "$LOCK_MESSAGE" >> "$LOCAL_DIRECTORY/$LOCK_FILE"
   git add "$LOCK_FILE"
   git commit --message "$LOCK_MESSAGE"
   git push --set-upstream origin "$LOCK_BRANCH" || {
@@ -141,7 +139,7 @@ then
   git checkout "$BRANCH"
 fi
 
-"$@"
+GITOLIZE_DIRECTORY="$LOCAL_DIRECTORY" "$@"
 EXIT_CODE=$?
 if [[ "$EXIT_CODE" != 0 ]]
 then

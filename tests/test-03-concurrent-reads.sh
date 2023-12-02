@@ -3,7 +3,7 @@
 gitolize.sh \
   -w \
   "file://$GIT_REPOSITORY" \
-  bash -c 'echo "test string" > test_file'
+  bash -c 'echo "test string" > "$GITOLIZE_DIRECTORY/test_file"'
 
 want_command_output \
   "$(
@@ -16,7 +16,7 @@ want_command_output \
       "file://$GIT_REPOSITORY" \
       bash -c '
         sleep 1
-        cat test_file
+        cat "$GITOLIZE_DIRECTORY/test_file"
       ' \
     -- \
     $(seq 10)

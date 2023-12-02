@@ -9,7 +9,7 @@ OUTPUT="$(
       "file://$GIT_REPOSITORY" \
       bash -c '
 	sleep 1
-	echo test string {} > test_file
+	echo test string {} > "$GITOLIZE_DIRECTORY/test_file"
       ' \
     -- \
     $(seq 9) \
