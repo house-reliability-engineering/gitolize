@@ -9,9 +9,13 @@ COPY ./gitolize.sh /usr/bin/
 
 FROM pulumi/pulumi-python:latest AS pulumi
 
+FROM hashicorp/terraform:latest AS terraform
+
 FROM base AS tests
 
 COPY --from=pulumi /pulumi/bin/* /usr/bin/
+
+COPY --from=terraform /bin/terraform /usr/bin/
 
 COPY \
   tests/test-10-pulumi-program/Pulumi.yaml \
