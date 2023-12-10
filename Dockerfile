@@ -22,6 +22,16 @@ COPY \
   tests/test-10-pulumi-program/pyproject.toml \
   /tmp/tests/test-10-pulumi-program/
 
+COPY \
+  tests/test-12-pulumi-program-a/Pulumi.yaml \
+  tests/test-12-pulumi-program-a/pyproject.toml \
+  /tmp/tests/test-12-pulumi-program-a/
+
+COPY \
+  tests/test-12-pulumi-program-b/Pulumi.yaml \
+  tests/test-12-pulumi-program-b/pyproject.toml \
+  /tmp/tests/test-12-pulumi-program-b/
+
 RUN \
   apt-get install --yes --no-install-recommends \
     jq \
@@ -32,8 +42,12 @@ RUN \
   git config --global receive.denyCurrentBranch ignore && \
   git config --global user.email tester@acme.org && \
   git config --global user.name Tester && \
-  cd /tmp/tests/test-10-pulumi-program && \
-  poetry install && \
-  poetry run pulumi plugin install
+  for PP in test-10-pulumi-program test-12-pulumi-program-a test-12-pulumi-program-b; \
+  do \
+      cd "/tmp/tests/$PP" && \
+      poetry install && \
+      poetry run pulumi plugin install || \
+      exit 1 ; \
+  done
 
 CMD ["/tmp/tests/run.sh"]

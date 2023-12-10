@@ -2,11 +2,11 @@
 
 export PULUMI_CONFIG_PASSPHRASE=secret
 
-cd test-10-pulumi-program
-
-cp state-gitignore "$GIT_REPOSITORY/.gitignore"
+cp ../examples/gitignore-pulumi-state "$GIT_REPOSITORY/.gitignore"
 git -C "$GIT_REPOSITORY" add .gitignore
 git -C "$GIT_REPOSITORY" commit --quiet --message ".gitignore"
+
+cd test-10-pulumi-program
 
 want_command_output_grep \
   "Created stack 'test'" \
