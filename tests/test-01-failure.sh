@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if gitolize.sh "file://$GIT_REPOSITORY" false 
+if gitolize.sh -r "file://$GIT_REPOSITORY" false
 then
   echo "expected failure" 1>&2
   exit 1

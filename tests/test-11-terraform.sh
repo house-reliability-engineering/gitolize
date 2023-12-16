@@ -9,9 +9,9 @@ TEST_FILE="$(mktemp)"
 want_command_output_grep \
   "Apply complete! Resources: 1 added, 0 changed, 0 destroyed." \
   gitolize.sh \
-    -w \
     -m "first terraform apply" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c '
       terraform init &&
       terraform apply \
@@ -33,9 +33,9 @@ want_command_output \
 want_command_output_grep \
   "Apply complete! Resources: 1 added, 0 changed, 1 destroyed." \
   gitolize.sh \
-    -w \
     -m "second terraform apply" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c '
       terraform init &&
       terraform apply \
@@ -73,9 +73,9 @@ want_command_output \
 want_command_output_grep \
   "Destroy complete! Resources: 1 destroyed." \
   gitolize.sh \
-    -w \
     -m "terraform destroy" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c '
       terraform init &&
       terraform destroy \

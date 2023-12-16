@@ -1,9 +1,9 @@
 #!/bin/bash
 
 gitolize.sh \
-  -w \
   -m "message 1" \
-  "file://$GIT_REPOSITORY" \
+  -r "file://$GIT_REPOSITORY" \
+  -w \
   bash -c 'echo "test string 1" > "$GITOLIZE_DIRECTORY/test_file"'
 
 want_command_output \
@@ -11,9 +11,9 @@ want_command_output \
   git -C "$GIT_REPOSITORY" log -1 --pretty=%B
 
 gitolize.sh \
-  -w \
   -m "message 2" \
-  "file://$GIT_REPOSITORY" \
+  -r "file://$GIT_REPOSITORY" \
+  -w \
   bash -c 'echo "test string 2" >> "$GITOLIZE_DIRECTORY/test_file"'
 
 want_command_output \

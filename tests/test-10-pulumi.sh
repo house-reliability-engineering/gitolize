@@ -11,9 +11,9 @@ cd test-10-pulumi-program
 want_command_output_grep \
   "Created stack 'test'" \
   gitolize.sh \
-    -w \
     -m "init stack" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" pulumi stack init test'
 
 want_command_output \
@@ -28,9 +28,9 @@ export PULUMI_TEST_STRING="test string 1"
 want_command_output_grep \
   "command:local:Command echo created" \
   gitolize.sh \
-    -w \
     -m "first pulumi up" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" poetry run pulumi up --skip-preview'
 
 want_command_output \
@@ -47,9 +47,9 @@ PULUMI_TEST_STRING="test string 2"
 want_command_output_grep \
   "command:local:Command echo updated" \
   gitolize.sh \
-    -w \
     -m "second pulumi up" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" poetry run pulumi up --skip-preview'
 
 want_command_output \
@@ -80,9 +80,9 @@ want_command_output \
 want_command_output_grep \
   "command:local:Command echo deleted" \
   gitolize.sh \
-    -w \
     -m "pulumi destroy" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" poetry run pulumi destroy --skip-preview'
 
 want_command_output \

@@ -9,7 +9,7 @@ set -o nounset
 set -o pipefail
 
 usage() {
-  echo "Usage: $0 [-b <branch>] [-l <local_directory>] [-m message] [-p project] [-v] [-w] [command...]" 1>&2
+  echo "Usage: $0 [-b <branch>] [-l <local_directory>] [-m message] [-p project] [-r repository] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
@@ -41,15 +41,16 @@ GIT_QUIET_FLAG=--quiet
 GIT_VERBOSE_FLAG=
 
 BRANCH=main
-PROJECT=
 LOCAL_DIRECTORY=
 CLEANUP_LOCAL_DIRECTORY=
 COMMIT_MESSAGE=
+PROJECT=
+GIT_REPOSITORY=
 VERBOSE=
 WRITE=
 
 
-while getopts b:l:m:p:vw OPTION
+while getopts b:l:m:p:r:vw OPTION
 do
   case $OPTION in
     b)
@@ -63,6 +64,9 @@ do
       ;;
     p)
       PROJECT="$OPTARG"
+      ;;
+    r)
+      GIT_REPOSITORY="$OPTARG"
       ;;
     v)
       VERBOSE=true
@@ -78,7 +82,7 @@ done
 
 shift $((OPTIND-1))
 
-if [[ "$#" < 2 ]]
+if [[ "$#" < 1 ]]
 then
   usage
 fi
@@ -101,9 +105,6 @@ then
   GIT_QUIET_FLAG=
   GIT_VERBOSE_FLAG=--verbose
 fi
-
-GIT_REPOSITORY="$1"
-shift
 
 if [[ ! "$COMMIT_MESSAGE" ]]
 then

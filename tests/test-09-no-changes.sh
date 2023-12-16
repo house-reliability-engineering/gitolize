@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gitolize.sh -w "file://$GIT_REPOSITORY" true
+gitolize.sh -r "file://$GIT_REPOSITORY" -w true
 
 want_command_output \
   $'true\n' \

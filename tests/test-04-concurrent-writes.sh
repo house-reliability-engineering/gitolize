@@ -7,8 +7,8 @@ parallel \
   -j 9 \
   bash -c "
     gitolize.sh \
+      -r 'file://$GIT_REPOSITORY' \
       -w \
-      'file://$GIT_REPOSITORY' \
       bash -c '
         sleep 1
         echo test string {} >> \"\$GITOLIZE_DIRECTORY/test_file\"

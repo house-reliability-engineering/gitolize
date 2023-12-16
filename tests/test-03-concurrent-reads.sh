@@ -1,8 +1,8 @@
 #!/bin/bash
 
 gitolize.sh \
+  -r "file://$GIT_REPOSITORY" \
   -w \
-  "file://$GIT_REPOSITORY" \
   bash -c 'echo "test string" > "$GITOLIZE_DIRECTORY/test_file"'
 
 want_command_output \
@@ -13,7 +13,7 @@ want_command_output \
   parallel \
     -j 10 \
     gitolize.sh \
-      "file://$GIT_REPOSITORY" \
+      -r "file://$GIT_REPOSITORY" \
       bash -c '
         sleep 1
         cat "$GITOLIZE_DIRECTORY/test_file"

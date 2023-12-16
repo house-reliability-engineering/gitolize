@@ -11,9 +11,9 @@ cd "$TERRAFORM_CONFIGURATION_A"
 want_command_output_grep \
   '\+ test-output = "test value"' \
   gitolize.sh \
-    -w \
     -m "a: terraform apply" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c '
       terraform init &&
       terraform apply \
@@ -27,9 +27,9 @@ cd "$TERRAFORM_CONFIGURATION_B"
 want_command_output_grep \
   '\+ proxied-output = "test value"' \
   gitolize.sh \
-    -w \
     -m "b: terraform apply" \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
+    -w \
     bash -c '
       terraform init &&
       terraform apply \

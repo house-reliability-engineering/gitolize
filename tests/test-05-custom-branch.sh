@@ -4,8 +4,8 @@ git -C "$GIT_REPOSITORY" checkout --quiet -b dragons
 
 gitolize.sh \
   -b dragons \
+  -r "file://$GIT_REPOSITORY" \
   -w \
-  "file://$GIT_REPOSITORY" \
   bash -c 'echo "test string" > "$GITOLIZE_DIRECTORY/test_file"'
 
 want_command_output \
@@ -16,7 +16,7 @@ want_command_output \
   "test string" \
   gitolize.sh \
     -b dragons \
-    "file://$GIT_REPOSITORY" \
+    -r "file://$GIT_REPOSITORY" \
     bash -c 'cat "$GITOLIZE_DIRECTORY/test_file"'
 
 want_command_output \

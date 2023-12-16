@@ -10,8 +10,8 @@ parallel \
       gitolize.sh \
         -m 'updated project {}' \
         -p '{}' \
+        -r 'file://$GIT_REPOSITORY' \
         -w \
-        'file://$GIT_REPOSITORY' \
         bash -c '
           sleep 0.5
           mkdir \"\$GITOLIZE_DIRECTORY/{}\" &&
