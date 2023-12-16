@@ -109,6 +109,10 @@ fi
 if [[ ! "$COMMIT_MESSAGE" ]]
 then
   COMMIT_MESSAGE="$*"
+  if [[ "$PROJECT" ]]
+  then
+    COMMIT_MESSAGE="$PROJECT: $*"
+  fi
 fi
 
 if [[ -d "$LOCAL_DIRECTORY/.git" ]]

@@ -8,7 +8,6 @@ parallel \
   -j 2 \
     bash -c "
       gitolize.sh \
-        -m 'updated project {}' \
         -p '{}' \
         -r 'file://$GIT_REPOSITORY' \
         -w \
@@ -30,8 +29,11 @@ do
     git -C "$GIT_REPOSITORY" show "main:$PROJECT/test_file"
 
   want_command_output \
-    "updated project $PROJECT
-" \
+  "$PROJECT"': bash -c
+          sleep 0.5
+          mkdir "$GITOLIZE_DIRECTORY/'"$PROJECT"'" &&
+          echo test string '"$PROJECT"' >> "$GITOLIZE_DIRECTORY/'"$PROJECT"'/test_file"
+' \
   git -C "$GIT_REPOSITORY" log -1 --pretty=%B -- "$PROJECT/test_file"
 
 done
