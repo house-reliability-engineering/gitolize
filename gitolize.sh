@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # A script wrapping a shell command so that it runs with a directory populated from a git repository.
-# In the write mode, the repository is locked with a temporary file and
+# In the write mode, the repository is locked using a temporary branch and
 # changes made in that directory by the shell command get pushed back to the repository.
 
 set -o errexit
