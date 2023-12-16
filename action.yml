@@ -1,0 +1,41 @@
+name: Gitolize
+description: Wrap a shell command with gitolize
+inputs:
+  branch:
+    description: which branch to pull from and push to
+  command:
+    description: shell command to be run by gitolize
+    required: true
+  local_directory:
+    description:  location of the gitolize target git repository checkout
+  message:
+    description: git commit message describing the changes to be made by the command
+  project:
+    description: which project is the command to operate on (used for locking)
+  repository:
+    description: url of the git repository to pull from and push to
+  stdio:
+    description: whether stdout/stder should be captured in the commit message
+    default: 'false'
+  verbose:
+    description: whether gitolize should be verbose
+    default: 'false'
+  write:
+    description: whether the changes made by the command are to be pushed to the git repository
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        ${{ github.action_path }}/gitolize.sh \
+          -b "${{ inputs.branch }}" \
+          -l "${{ inputs.local_directory }}" \
+          -m "${{ inputs.message }}" \
+          -p "${{ inputs.project }}" \
+          -r "${{ inputs.repository}}" \
+          ${{ inputs.stdio == 'true' && '-s' || '' }} \
+          ${{ inputs.verbose == 'true' && '-v' || '' }} \
+          ${{ inputs.write == 'true' && '-w' || '' }} \
+          ${{ inputs.command }}
