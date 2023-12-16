@@ -152,7 +152,12 @@ if [[ "$WRITE" ]]
 then
   git add .
   git commit --allow-empty --message "$COMMIT_MESSAGE"
-  git push
+  if ! git push 2>/dev/null
+  then
+    # in case something has been written for another project in the meantime
+    git pull --rebase
+    git push
+  fi
   git branch --delete --force "$LOCK_BRANCH"
   git push origin --delete "$LOCK_BRANCH"
 fi

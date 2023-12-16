@@ -1,36 +1,39 @@
 #!/bin/bash
 
-PROJECT=something
+PROJECTS="first second"
 
-gitolize.sh \
-  -p "$PROJECT" \
-  -w \
-  "file://$GIT_REPOSITORY" \
-  bash -c '
-    mkdir "$GITOLIZE_DIRECTORY/'"$PROJECT"'" &&
-    echo "test string" > "$GITOLIZE_DIRECTORY/'"$PROJECT"'/test_file"
-  '
+# these two should not fight over a lock
+parallel \
+  -i \
+  -j 2 \
+    bash -c "
+      gitolize.sh \
+        -m 'updated project {}' \
+        -p '{}' \
+        -w \
+        'file://$GIT_REPOSITORY' \
+        bash -c '
+          sleep 0.5
+          mkdir \"\$GITOLIZE_DIRECTORY/{}\" &&
+          echo test string {} >> \"\$GITOLIZE_DIRECTORY/{}/test_file\"
+        '
+    " \
+  -- \
+  $PROJECTS
 
-want_command_output \
-  "test string" \
-  git -C "$GIT_REPOSITORY" show "main:$PROJECT/test_file"
 
-want_command_output \
-  "test string" \
-  gitolize.sh \
-    -p "$PROJECT" \
-    "file://$GIT_REPOSITORY" \
-    bash -c 'cat "$GITOLIZE_DIRECTORY/'"$PROJECT"'/test_file"'
+for PROJECT in $PROJECTS
+do
 
-want_command_output \
-  "test string" \
-  git -C "$GIT_REPOSITORY" show "main:$PROJECT/test_file"
+  want_command_output \
+    "test string $PROJECT" \
+    git -C "$GIT_REPOSITORY" show "main:$PROJECT/test_file"
 
-want_command_output \
-  'bash -c
-    mkdir "$GITOLIZE_DIRECTORY/'"$PROJECT"'" &&
-    echo "test string" > "$GITOLIZE_DIRECTORY/'"$PROJECT"'/test_file"
-' \
+  want_command_output \
+    "updated project $PROJECT
+" \
   git -C "$GIT_REPOSITORY" log -1 --pretty=%B -- "$PROJECT/test_file"
+
+done
 
 rm -r "$GIT_REPOSITORY"
