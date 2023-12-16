@@ -9,7 +9,7 @@ set -o nounset
 set -o pipefail
 
 usage() {
-  echo "Usage: $0 [-b <branch>] [-d <git_directory>] [-l <local_directory>] [-m message] [-w] [command...]" 1>&2
+  echo "Usage: $0 [-b <branch>] [-d <git_directory>] [-l <local_directory>] [-m message] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
