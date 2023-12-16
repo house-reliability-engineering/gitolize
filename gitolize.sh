@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # A script wrapping a shell command so that it runs with a directory populated from a git repository.
-# In the write mode, the repository is locked using a temporary branch and
+# In the write mode, the repository is locked using a temporary branch on a per-project basis and
 # changes made in that directory by the shell command get pushed back to the repository.
 
 set -o errexit
@@ -9,7 +9,7 @@ set -o nounset
 set -o pipefail
 
 usage() {
-  echo "Usage: $0 [-b <branch>] [-d <git_directory>] [-l <local_directory>] [-m message] [-v] [-w] [command...]" 1>&2
+  echo "Usage: $0 [-b <branch>] [-l <local_directory>] [-m message] [-p project] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
@@ -41,7 +41,7 @@ GIT_QUIET_FLAG=--quiet
 GIT_VERBOSE_FLAG=
 
 BRANCH=main
-GIT_DIRECTORY=.
+PROJECT=
 LOCAL_DIRECTORY=
 CLEANUP_LOCAL_DIRECTORY=
 COMMIT_MESSAGE=
@@ -49,20 +49,20 @@ VERBOSE=
 WRITE=
 
 
-while getopts b:d:l:m:vw OPTION
+while getopts b:l:m:p:vw OPTION
 do
   case $OPTION in
     b)
       BRANCH="$OPTARG"
-      ;;
-    d)
-      GIT_DIRECTORY="$OPTARG"
       ;;
     l)
       LOCAL_DIRECTORY="$OPTARG"
       ;;
     m)
       COMMIT_MESSAGE="$OPTARG"
+      ;;
+    p)
+      PROJECT="$OPTARG"
       ;;
     v)
       VERBOSE=true
@@ -89,11 +89,9 @@ then
   CLEANUP_LOCAL_DIRECTORY=true
 fi
 
-# /. is illegal, see https://git-scm.com/docs/git-check-ref-format#_description
-LOCK_BRANCH_SUFFIX="${GIT_DIRECTORY/./}"
-if [[ "$LOCK_BRANCH_SUFFIX" ]]
+if [[ "$PROJECT" ]]
 then
-   LOCK_BRANCH="lock/$LOCK_BRANCH_SUFFIX"
+   LOCK_BRANCH="lock/${PROJECT}"
 else
    LOCK_BRANCH="lock"
 fi

@@ -12,7 +12,7 @@ want_command_output_grep \
   "Created stack 'test'" \
   gitolize.sh \
     -w \
-    -d a \
+    -p a \
     "file://$GIT_REPOSITORY" \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" pulumi stack init test'
 
@@ -20,7 +20,7 @@ want_command_output_grep \
   'test-output: "test value"' \
   gitolize.sh \
     -w \
-    -d a \
+    -p a \
     "file://$GIT_REPOSITORY" \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" poetry run pulumi up --skip-preview'
 
@@ -31,7 +31,7 @@ want_command_output_grep \
   "Created stack 'test'" \
   gitolize.sh \
     -w \
-    -d b \
+    -p b \
     "file://$GIT_REPOSITORY" \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" pulumi stack init test'
 
