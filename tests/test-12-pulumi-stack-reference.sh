@@ -39,6 +39,7 @@ want_command_output_grep \
 want_command_output_grep \
   'proxied-output: "test value"' \
   gitolize.sh \
+    -p b \
     -r "file://$GIT_REPOSITORY" \
     -w \
     bash -c 'PULUMI_BACKEND_URL="file://$GITOLIZE_DIRECTORY" poetry run pulumi up --skip-preview'
