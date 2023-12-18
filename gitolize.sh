@@ -39,7 +39,8 @@ EXIT_CODE=0
 GIT_QUIET_FLAG=--quiet
 GIT_VERBOSE_FLAG=
 
-BRANCH=main
+BRANCH=()
+BRANCH_CLONE=()
 LOCAL_DIRECTORY=
 CLEANUP_LOCAL_DIRECTORY=
 COMMIT_MESSAGE=
@@ -54,7 +55,8 @@ while getopts b:l:m:p:r:svw OPTION
 do
   case $OPTION in
     b)
-      BRANCH="$OPTARG"
+      BRANCH=("$OPTARG")
+      BRANCH_CLONE=("--branch" "$OPTARG")
       ;;
     l)
       LOCAL_DIRECTORY="$OPTARG"
@@ -120,11 +122,11 @@ fi
 
 if [[ -d "$LOCAL_DIRECTORY/.git" ]]
 then
-  wgit checkout "$BRANCH"
+  wgit checkout "${BRANCH[@]}"
   wgit pull
 else
   wgit clone \
-    --branch "$BRANCH" \
+    "${BRANCH_CLONE[@]}" \
     --depth 1 \
     "$GIT_REPOSITORY" \
     "$LOCAL_DIRECTORY"
@@ -132,6 +134,7 @@ fi
 
 if [[ "$WRITE" ]]
 then
+  CURRENT_BRANCH="$(wgit branch --show-current)"
   wgit checkout -b "$LOCK_BRANCH"
   LOCK_MESSAGE="Locking for $COMMIT_MESSAGE"
   echo "$LOCK_MESSAGE" >> "$LOCAL_DIRECTORY/$LOCK_FILE"
@@ -142,7 +145,7 @@ then
     echo "locking failed" 1>&2
     exit "$EXIT_CODE"
   }
-  wgit checkout "$BRANCH"
+  wgit checkout "$CURRENT_BRANCH"
 fi
 
 if [[ "$CAPTURE_STDIO" ]]

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git -C "$GIT_REPOSITORY" checkout --quiet -b dragons
+git -C "$GIT_REPOSITORY" branch dragons
 
 gitolize.sh \
   -b dragons \
@@ -25,6 +25,6 @@ want_command_output \
 
 want_command_output \
   $'bash -c echo "test string" > "$GITOLIZE_DIRECTORY/test_file"\n' \
-  git -C "$GIT_REPOSITORY" log -1 --pretty=%B
+  git -C "$GIT_REPOSITORY" log -1 --pretty=%B dragons
 
 rm -r "$GIT_REPOSITORY"
