@@ -13,7 +13,7 @@ usage() {
   exit 1
 }
 
-git() {
+wgit() {
   COMMAND="$1"
   shift
   EXTRA_FLAGS=
@@ -27,16 +27,15 @@ git() {
   esac
   if [[ "$VERBOSE" ]]
   then
-    echo "running $GIT -C "$LOCAL_DIRECTORY" $COMMAND $EXTRA_FLAGS $@" 1>&2
+    echo "running git -C "$LOCAL_DIRECTORY" $COMMAND $EXTRA_FLAGS $@" 1>&2
   fi
-  $GIT -C "$LOCAL_DIRECTORY" $COMMAND $EXTRA_FLAGS "$@"
+  git -C "$LOCAL_DIRECTORY" $COMMAND $EXTRA_FLAGS "$@"
 }
 
 LOCK_FILE=gitolize.lock
 
 EXIT_CODE=0
 
-GIT="$(which git)"
 GIT_QUIET_FLAG=--quiet
 GIT_VERBOSE_FLAG=
 
@@ -121,10 +120,10 @@ fi
 
 if [[ -d "$LOCAL_DIRECTORY/.git" ]]
 then
-  git checkout "$BRANCH"
-  git pull
+  wgit checkout "$BRANCH"
+  wgit pull
 else
-  git clone \
+  wgit clone \
     --branch "$BRANCH" \
     --depth 1 \
     "$GIT_REPOSITORY" \
@@ -133,17 +132,17 @@ fi
 
 if [[ "$WRITE" ]]
 then
-  git checkout -b "$LOCK_BRANCH"
+  wgit checkout -b "$LOCK_BRANCH"
   LOCK_MESSAGE="Locking for $COMMIT_MESSAGE"
   echo "$LOCK_MESSAGE" >> "$LOCAL_DIRECTORY/$LOCK_FILE"
-  git add "$LOCK_FILE"
-  git commit --message "$LOCK_MESSAGE"
-  git push --set-upstream origin "$LOCK_BRANCH" || {
+  wgit add "$LOCK_FILE"
+  wgit commit --message "$LOCK_MESSAGE"
+  wgit push --set-upstream origin "$LOCK_BRANCH" || {
     EXIT_CODE=$?
     echo "locking failed" 1>&2
     exit "$EXIT_CODE"
   }
-  git checkout "$BRANCH"
+  wgit checkout "$BRANCH"
 fi
 
 if [[ "$CAPTURE_STDIO" ]]
@@ -181,16 +180,16 @@ fi
 
 if [[ "$WRITE" ]]
 then
-  git add .
-  git commit --allow-empty --message "$COMMIT_MESSAGE"
-  if ! git push 2>/dev/null
+  wgit add .
+  wgit commit --allow-empty --message "$COMMIT_MESSAGE"
+  if ! wgit push 2>/dev/null
   then
     # in case something has been written for another project in the meantime
-    git pull --rebase
-    git push
+    wgit pull --rebase
+    wgit push
   fi
-  git branch --delete --force "$LOCK_BRANCH"
-  git push origin --delete "$LOCK_BRANCH"
+  wgit branch --delete --force "$LOCK_BRANCH"
+  wgit push origin --delete "$LOCK_BRANCH"
 fi
 
 if [[ "$CLEANUP_LOCAL_DIRECTORY" ]]
