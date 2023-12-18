@@ -34,6 +34,6 @@ want_command_output \
 
 want_command_output \
   "test string n" \
-  bash -c "git -C "$GIT_REPOSITORY" show main:test_file | tr [0-9] n"
+  bash -c "git -C "$GIT_REPOSITORY" show main:test_file | tr 0-9 n"
 
 rm -r "$OUTPUTS" "$GIT_REPOSITORY"
