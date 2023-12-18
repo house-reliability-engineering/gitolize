@@ -148,8 +148,11 @@ then
   wgit checkout "$CURRENT_BRANCH"
 fi
 
+set +o errexit
+
 if [[ "$CAPTURE_STDIO" ]]
 then
+
   {
     STDIO="$(
       (
@@ -159,6 +162,7 @@ then
       ) 4>&1
     )"
   } 3>&1
+  EXIT_CODE=$?
   COMMIT_MESSAGE="
 $COMMIT_MESSAGE
 
@@ -169,9 +173,11 @@ $STDIO
 
 else
     GITOLIZE_DIRECTORY="$LOCAL_DIRECTORY" "$@"
+    EXIT_CODE=$?
 fi
 
-EXIT_CODE=$?
+set -o errexit
+
 if [[ "$EXIT_CODE" != 0 ]]
 then
   CLEANUP_LOCAL_DIRECTORY=
