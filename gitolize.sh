@@ -9,7 +9,7 @@ set -o nounset
 set -o pipefail
 
 usage() {
-  echo "Usage: $0 [-b <branch>] [-l <local_directory>] [-m message] [-p project] [-r repository] [-v] [-w] [command...]" 1>&2
+  echo "Usage: $0 [-b <branch>] [-l <local_directory>] [-m message] [-p project] [-r repository] [-s] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
@@ -46,11 +46,12 @@ CLEANUP_LOCAL_DIRECTORY=
 COMMIT_MESSAGE=
 PROJECT=
 GIT_REPOSITORY=
+CAPTURE_STDIO=
 VERBOSE=
 WRITE=
 
 
-while getopts b:l:m:p:r:vw OPTION
+while getopts b:l:m:p:r:svw OPTION
 do
   case $OPTION in
     b)
@@ -67,6 +68,9 @@ do
       ;;
     r)
       GIT_REPOSITORY="$OPTARG"
+      ;;
+    s)
+      CAPTURE_STDIO=true
       ;;
     v)
       VERBOSE=true
@@ -142,7 +146,29 @@ then
   git checkout "$BRANCH"
 fi
 
-GITOLIZE_DIRECTORY="$LOCAL_DIRECTORY" "$@"
+if [[ "$CAPTURE_STDIO" ]]
+then
+  {
+    STDIO="$(
+      (
+        GITOLIZE_DIRECTORY="$LOCAL_DIRECTORY" "$@" \
+        2> >(tee /dev/fd/4 >&2) |
+        tee /dev/fd/4 1>&3
+      ) 4>&1
+    )"
+  } 3>&1
+  COMMIT_MESSAGE="
+$COMMIT_MESSAGE
+
+\`\`\`
+$STDIO
+\`\`\`
+"
+
+else
+    GITOLIZE_DIRECTORY="$LOCAL_DIRECTORY" "$@"
+fi
+
 EXIT_CODE=$?
 if [[ "$EXIT_CODE" != 0 ]]
 then
