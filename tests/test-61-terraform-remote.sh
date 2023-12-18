@@ -1,10 +1,10 @@
 #!/bin/bash
 
 TERRAFORM_CONFIGURATION_A="$(mktemp -d)"
-cp test-13-terraform-configuration-a/main.tf "$TERRAFORM_CONFIGURATION_A/main.tf"
+cp test-61-terraform-configuration-a/main.tf "$TERRAFORM_CONFIGURATION_A/main.tf"
 
 TERRAFORM_CONFIGURATION_B="$(mktemp -d)"
-cp test-13-terraform-configuration-b/main.tf "$TERRAFORM_CONFIGURATION_B/main.tf"
+cp test-61-terraform-configuration-b/main.tf "$TERRAFORM_CONFIGURATION_B/main.tf"
 
 cd "$TERRAFORM_CONFIGURATION_A"
 

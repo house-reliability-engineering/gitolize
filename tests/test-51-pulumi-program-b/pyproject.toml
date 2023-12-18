@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "test-12-pulumi-program-b"
+name = "test-51-pulumi-program-b"
 description = "Pulumi program for testing stack references with gitolize"
 authors = ["Filip Zyzniewski <filip.zyzniewski@gmail.com>"]
 version = "0.1.0"

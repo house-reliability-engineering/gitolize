@@ -6,7 +6,7 @@ cp ../examples/gitignore-pulumi-state "$GIT_REPOSITORY/.gitignore"
 git -C "$GIT_REPOSITORY" add .gitignore
 git -C "$GIT_REPOSITORY" commit --quiet --message ".gitignore"
 
-cd test-10-pulumi-program
+cd test-50-pulumi-program
 
 want_command_output_grep \
   "Created stack 'test'" \

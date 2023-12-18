@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TERRAFORM_CONFIGURATION="$(mktemp -d)"
-cp test-11-terraform-configuration/main.tf "$TERRAFORM_CONFIGURATION/main.tf"
+cp test-60-terraform-configuration/main.tf "$TERRAFORM_CONFIGURATION/main.tf"
 cd "$TERRAFORM_CONFIGURATION"
 
 TEST_FILE="$(mktemp)"

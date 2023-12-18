@@ -18,19 +18,19 @@ COPY --from=pulumi /pulumi/bin/* /usr/bin/
 COPY --from=terraform /bin/terraform /usr/bin/
 
 COPY \
-  tests/test-10-pulumi-program/Pulumi.yaml \
-  tests/test-10-pulumi-program/pyproject.toml \
-  /tmp/tests/test-10-pulumi-program/
+  tests/test-50-pulumi-program/Pulumi.yaml \
+  tests/test-50-pulumi-program/pyproject.toml \
+  /tmp/tests/test-50-pulumi-program/
 
 COPY \
-  tests/test-12-pulumi-program-a/Pulumi.yaml \
-  tests/test-12-pulumi-program-a/pyproject.toml \
-  /tmp/tests/test-12-pulumi-program-a/
+  tests/test-51-pulumi-program-a/Pulumi.yaml \
+  tests/test-51-pulumi-program-a/pyproject.toml \
+  /tmp/tests/test-51-pulumi-program-a/
 
 COPY \
-  tests/test-12-pulumi-program-b/Pulumi.yaml \
-  tests/test-12-pulumi-program-b/pyproject.toml \
-  /tmp/tests/test-12-pulumi-program-b/
+  tests/test-51-pulumi-program-b/Pulumi.yaml \
+  tests/test-51-pulumi-program-b/pyproject.toml \
+  /tmp/tests/test-51-pulumi-program-b/
 
 RUN \
   apt-get install --yes --no-install-recommends \
@@ -42,7 +42,7 @@ RUN \
   git config --global receive.denyCurrentBranch ignore && \
   git config --global user.email tester@acme.org && \
   git config --global user.name Tester && \
-  for PP in test-10-pulumi-program test-12-pulumi-program-a test-12-pulumi-program-b; \
+  for PP in test-50-pulumi-program test-51-pulumi-program-a test-51-pulumi-program-b; \
   do \
       cd "/tmp/tests/$PP" && \
       poetry install && \
