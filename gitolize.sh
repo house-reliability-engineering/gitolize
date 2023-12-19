@@ -195,7 +195,17 @@ then
   then
     # in case something has been written for another project in the meantime
     wgit pull --rebase
-    wgit push
+    if ! wgit push
+    then
+      BACKUP_BRANCH="$CURRENT_BRANCH-$(wgit rev-parse HEAD)"
+      echo \
+        ERROR: could not push to branch "$CURRENT_BRANCH", \
+        pushing to "$BACKUP_BRANCH" instead \
+        and leaving the '"$LOCK_BRANCH"' lock in place 1>&2
+      wgit branch "$BACKUP_BRANCH"
+      wgit push --set-upstream origin "$BACKUP_BRANCH"
+      exit 1
+    fi
   fi
   wgit branch --delete --force "$LOCK_BRANCH"
   wgit push origin --delete "$LOCK_BRANCH"
