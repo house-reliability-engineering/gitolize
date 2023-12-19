@@ -30,11 +30,11 @@ runs:
     - shell: bash
       run: |
         ${{ github.action_path }}/gitolize.sh \
-          -b "${{ inputs.branch }}" \
-          -l "${{ inputs.local_directory }}" \
-          -m "${{ inputs.message }}" \
-          -p "${{ inputs.project }}" \
-          -r "${{ inputs.repository}}" \
+          ${{ inputs.branch && format('-b "{0}"', inputs.branch) || '' }} \
+          ${{ inputs.local_directory && format('-l "{0}"', inputs.local_directory) || '' }} \
+          ${{ inputs.message && format('-m "{0}"', inputs.message) || '' }} \
+          ${{ inputs.project && format('-p "{0}"', inputs.project) || '' }} \
+          ${{ inputs.repository && format('-r "{0}"', inputs.repository) || '' }} \
           ${{ inputs.stdio == 'true' && '-s' || '' }} \
           ${{ inputs.verbose == 'true' && '-v' || '' }} \
           ${{ inputs.write == 'true' && '-w' || '' }} \
