@@ -8,8 +8,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+PROGRAM="$(basename "$0")"
+
 usage() {
-  echo "Usage: $0 [-b <branch>] [-l <local_directory>] [-m message] [-p project] [-r repository] [-s] [-v] [-w] [command...]" 1>&2
+  echo "Usage: $PROGRAM [-b <branch>] [-c] [-l <local_directory>] [-m message] [-p project] [-r repository] [-s] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
@@ -41,6 +43,7 @@ GIT_VERBOSE_FLAG=
 
 BRANCH=()
 BRANCH_CLONE=()
+PRINT_COMMIT_SHA=
 LOCAL_DIRECTORY=
 CLEANUP_LOCAL_DIRECTORY=
 COMMIT_MESSAGE=
@@ -51,12 +54,15 @@ VERBOSE=
 WRITE=
 
 
-while getopts b:l:m:p:r:svw OPTION
+while getopts b:cl:m:p:r:svw OPTION
 do
   case $OPTION in
     b)
       BRANCH=("$OPTARG")
       BRANCH_CLONE=("--branch" "$OPTARG")
+      ;;
+    c)
+      PRINT_COMMIT_SHA=true
       ;;
     l)
       LOCAL_DIRECTORY="$OPTARG"
@@ -206,6 +212,10 @@ then
       wgit push --set-upstream origin "$BACKUP_BRANCH"
       exit 1
     fi
+  fi
+  if [[ "$PRINT_COMMIT_SHA" ]]
+  then
+    echo "$PROGRAM: commit: $(wgit rev-parse HEAD)" 1>&2
   fi
   wgit branch --delete --force "$LOCK_BRANCH"
   wgit push origin --delete "$LOCK_BRANCH"
