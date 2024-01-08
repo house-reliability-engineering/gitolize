@@ -2,34 +2,34 @@
 
 STDERR=$(mktemp)
 
+cd "$GIT_REPOSITORY"
+
 want_command_output \
-  "this is stdout" \
+  README.md \
   bash -c "
     gitolize.sh \
       -r 'file://$GIT_REPOSITORY' \
+      -m ls \
       -s \
       -w \
-      bash -c \"
-        echo 'this is stdout'
+      bash -c '
+        ls .
         sleep 0.1
-        echo 'this is stderr' 1>&2
-      \" \
-      2>$STDERR
+        ls nonexistant
+     ' \
+    2>$STDERR
   "
 
 want_file_contents \
-  "this is stderr" \
+  "ls: cannot access 'nonexistant': No such file or directory" \
   "$STDERR"
 
 want_command_output \
-  "bash -c
-        echo 'this is stdout'
-        sleep 0.1
-        echo 'this is stderr' 1>&2
+  "ls
 
 \`\`\`
-this is stdout
-this is stderr
+README.md
+ls: cannot access 'nonexistant': No such file or directory
 \`\`\`
 " \
   git -C "$GIT_REPOSITORY" log -1 --pretty=%B
