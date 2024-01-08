@@ -190,7 +190,7 @@ fi
 if [[ "$WRITE" ]]
 then
   wgit add .
-  wgit commit --allow-empty --message "$COMMIT_MESSAGE"
+  wgit commit --allow-empty --file - <<< "$COMMIT_MESSAGE"
   if ! wgit push 2>/dev/null
   then
     # in case something has been written for another project in the meantime
