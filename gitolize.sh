@@ -11,7 +11,7 @@ set -o pipefail
 PROGRAM="$(basename "$0")"
 
 usage() {
-  echo "Usage: $PROGRAM [-b <branch>] [-c] [-l <local_directory>] [-m message] [-p project] [-r repository] [-s] [-v] [-w] [command...]" 1>&2
+  echo "Usage: $PROGRAM [-a] [-b <branch>] [-c] [-l <local_directory>] [-m message] [-p project] [-r repository] [-s] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
@@ -41,6 +41,7 @@ EXIT_CODE=0
 GIT_QUIET_FLAG=--quiet
 GIT_VERBOSE_FLAG=
 
+ALLOW_ANSI=
 BRANCH=()
 BRANCH_CLONE=()
 PRINT_COMMIT_SHA=
@@ -54,9 +55,12 @@ VERBOSE=
 WRITE=
 
 
-while getopts b:cl:m:p:r:svw OPTION
+while getopts ab:cl:m:p:r:svw OPTION
 do
   case $OPTION in
+    a)
+      ALLOW_ANSI=true
+      ;;
     b)
       BRANCH=("$OPTARG")
       BRANCH_CLONE=("--branch" "$OPTARG")
@@ -169,6 +173,12 @@ then
     )"
   } 3>&1
   EXIT_CODE=$?
+
+  if ! [[ "$ALLOW_ANSI" ]]
+  then
+    STDIO="$(sed -e 's/\x1b\[[0-9;]*m//g' <<< "$STDIO")"
+  fi
+
   COMMIT_MESSAGE="
 $COMMIT_MESSAGE
 

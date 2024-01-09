@@ -36,6 +36,20 @@ want_file_contents() {
     <<< "$1"
 }
 
+check_no_ansi_escape_sequences_in_git_log() {
+  NON_ASCII="$(
+    git -C "$GIT_REPOSITORY" log -1 --pretty=%B |
+    grep '[^[:print:]]' ||
+    true
+  )"
+  if [[ "$NON_ASCII" ]]
+  then
+    echo "commit message contains non-ascii characters:"
+    cat <<< "$NON_ASCII"
+    return 1
+  fi
+}
+
 GIT_REPOSITORY="$(mktemp -d)"
 git init --quiet "$GIT_REPOSITORY"
 echo 'Test repository' > "$GIT_REPOSITORY/README.md"
