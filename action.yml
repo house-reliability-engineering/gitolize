@@ -1,7 +1,7 @@
 name: Gitolize
 description: Wrap a shell command with gitolize
 inputs:
-  ansi:
+  keep-ansi-in-commit-message:
     description: whether to keep ANSI escape sequences in the commit message
     default: 'false'
   branch:
@@ -14,7 +14,7 @@ inputs:
     default: 'false'
   local_directory:
     description:  location of the gitolize target git repository checkout
-  message:
+  commit-message:
     description: git commit message describing the changes to be made by the command
   project:
     description: which project is the command to operate on (used for locking)
@@ -36,11 +36,11 @@ runs:
     - shell: bash
       run: |
         ${{ github.action_path }}/gitolize.sh \
-          ${{ inputs.ansi == 'true' && '-a' || '' }} \
+          ${{ inputs.keep-ansi-in-commit-message == 'true' && '-a' || '' }} \
           ${{ inputs.branch && format('-b "{0}"', inputs.branch) || '' }} \
           ${{ inputs.print-commit-sha == 'true' && '-c' || '' }} \
           ${{ inputs.local_directory && format('-l "{0}"', inputs.local_directory) || '' }} \
-          ${{ inputs.message && format('-m "{0}"', inputs.message) || '' }} \
+          ${{ inputs.commit-message && format('-m "{0}"', inputs.commit-message) || '' }} \
           ${{ inputs.project && format('-p "{0}"', inputs.project) || '' }} \
           ${{ inputs.repository && format('-r "{0}"', inputs.repository) || '' }} \
           ${{ inputs.stdio == 'true' && '-s' || '' }} \
