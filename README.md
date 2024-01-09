@@ -35,7 +35,7 @@ house-reliability-engineering/gitolize$
 
 - `-m <message>`:
   use a particular git message content instead of
-  the ran command.
+  the command that has been run.
 
 - `-p <project>`:
   lock the state for a particular project.
