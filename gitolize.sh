@@ -11,7 +11,7 @@ set -o pipefail
 PROGRAM="$(basename "$0")"
 
 usage() {
-  echo "Usage: $PROGRAM [-a] [-b <branch>] [-c] [-l <local_directory>] [-m message] [-p project] [-r repository] [-s] [-v] [-w] [command...]" 1>&2
+  echo "Usage: $PROGRAM [-a] [-b <branch>] [-c] [-l <local_directory>] [-m <message>] [-p <project>] [-r <repository>] [-s] [-v] [-w] [command...]" 1>&2
   exit 1
 }
 
