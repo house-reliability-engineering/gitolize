@@ -11,6 +11,7 @@ want_command_output_grep \
   gitolize.sh \
     -m "first terraform apply" \
     -r "file://$GIT_REPOSITORY" \
+    -s \
     -w \
     bash -c '
       terraform init &&
@@ -20,6 +21,8 @@ want_command_output_grep \
         -var=content="test string 1" \
         -var=filename="'"$TEST_FILE"'"
     '
+
+check_no_ansi_escape_sequences_in_git_log
 
 FIRST_COMMIT="$(git -C "$GIT_REPOSITORY" rev-parse main)"
 
@@ -35,6 +38,7 @@ want_command_output_grep \
   gitolize.sh \
     -m "second terraform apply" \
     -r "file://$GIT_REPOSITORY" \
+    -s \
     -w \
     bash -c '
       terraform init &&
@@ -44,6 +48,8 @@ want_command_output_grep \
         -var=content="test string 2" \
         -var=filename="'"$TEST_FILE"'"
     '
+
+check_no_ansi_escape_sequences_in_git_log
 
 want_command_output \
   "test string 2" \
@@ -75,6 +81,7 @@ want_command_output_grep \
   gitolize.sh \
     -m "terraform destroy" \
     -r "file://$GIT_REPOSITORY" \
+    -s \
     -w \
     bash -c '
       terraform init &&
@@ -84,6 +91,8 @@ want_command_output_grep \
         -var=content="test string 2" \
         -var=filename="'"$TEST_FILE"'"
     '
+
+check_no_ansi_escape_sequences_in_git_log
 
 want_command_output \
   "0" \
