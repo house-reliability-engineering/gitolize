@@ -1,11 +1,17 @@
 name: Gitolize
 description: Wrap a shell command with gitolize
 inputs:
+  ansi:
+    description: whether to keep ANSI escape sequences in the commit message
+    default: 'false'
   branch:
     description: which branch to pull from and push to
   command:
     description: shell command to be run by gitolize
     required: true
+  commit-sha:
+    description: whether to print the SHA of the new git commit
+    default: 'false'
   local_directory:
     description:  location of the gitolize target git repository checkout
   message:
@@ -30,7 +36,9 @@ runs:
     - shell: bash
       run: |
         ${{ github.action_path }}/gitolize.sh \
+          ${{ inputs.ansi == 'true' && '-a' || '' }} \
           ${{ inputs.branch && format('-b "{0}"', inputs.branch) || '' }} \
+          ${{ inputs.commit-sha == 'true' && '-c' || '' }} \
           ${{ inputs.local_directory && format('-l "{0}"', inputs.local_directory) || '' }} \
           ${{ inputs.message && format('-m "{0}"', inputs.message) || '' }} \
           ${{ inputs.project && format('-p "{0}"', inputs.project) || '' }} \
