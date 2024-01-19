@@ -233,7 +233,7 @@ fi
 
 if [[ "$CLEANUP_LOCAL_DIRECTORY" ]]
 then
-  rm -r "$LOCAL_DIRECTORY"
+  rm -rf "$LOCAL_DIRECTORY"
 fi
 
 exit "$EXIT_CODE"
